@@ -7,10 +7,10 @@
 
 #include "rclcpp/rclcpp.hpp"
 #include "geometry_msgs/msg/twist_stamped.hpp"
-#include "robotino_msgs/srv/set_omni_drive_enabled.hpp"
-#include "robotino_msgs/msg/motor_error_readings.hpp"
+#include "base_interfaces/srv/set_omni_drive_enabled.hpp"
+#include "base_interfaces/msg/motor_error_readings.hpp"
 #include "std_msgs/msg/bool.hpp"
-#include "robotino_msgs/srv/set_vel_limits.hpp"
+#include "base_interfaces/srv/set_vel_limits.hpp"
 
 class OmniDriveROS: public rec::robotino::api2::OmniDrive
 {
@@ -27,12 +27,12 @@ public:
 private:
 	rclcpp::Node* node_;
 	rclcpp::Subscription<geometry_msgs::msg::Twist>::SharedPtr cmd_vel_sub_;
-	rclcpp::Service<robotino_msgs::srv::SetOmniDriveEnabled>::SharedPtr set_enabled_srv_;
-	rclcpp::Service<robotino_msgs::srv::SetVelLimits>::SharedPtr set_velocitylimit_srv_;
-	rclcpp::Publisher<robotino_msgs::msg::MotorErrorReadings>::SharedPtr motor_error_pub_;
+	rclcpp::Service<base_interfaces::srv::SetOmniDriveEnabled>::SharedPtr set_enabled_srv_;
+	rclcpp::Service<base_interfaces::srv::SetVelLimits>::SharedPtr set_velocitylimit_srv_;
+	rclcpp::Publisher<base_interfaces::msg::MotorErrorReadings>::SharedPtr motor_error_pub_;
 	rclcpp::Subscription<std_msgs::msg::Bool>::SharedPtr bumper_sub_;
 
-	robotino_msgs::msg::MotorErrorReadings motor_error_msg_;
+	base_interfaces::msg::MotorErrorReadings motor_error_msg_;
 
 	double max_linear_vel_;
 	double min_linear_vel_;
@@ -60,11 +60,11 @@ private:
 
 	void cmdVelCallback(const geometry_msgs::msg::Twist::SharedPtr msg);
 	void initMsgs();
-	bool handleSetOmniDriveEnabled(const std::shared_ptr<robotino_msgs::srv::SetOmniDriveEnabled::Request> request,
-                          std::shared_ptr<robotino_msgs::srv::SetOmniDriveEnabled::Response> response);
+	bool handleSetOmniDriveEnabled(const std::shared_ptr<base_interfaces::srv::SetOmniDriveEnabled::Request> request,
+                          std::shared_ptr<base_interfaces::srv::SetOmniDriveEnabled::Response> response);
 
-	bool handleSetVelLimits(const std::shared_ptr<robotino_msgs::srv::SetVelLimits::Request> request,
-                                    std::shared_ptr<robotino_msgs::srv::SetVelLimits::Response> response);
+	bool handleSetVelLimits(const std::shared_ptr<base_interfaces::srv::SetVelLimits::Request> request,
+                                    std::shared_ptr<base_interfaces::srv::SetVelLimits::Response> response);
 
 	void bumperCallback(const std_msgs::msg::Bool::SharedPtr msg);
 	void timerCallback();

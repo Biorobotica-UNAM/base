@@ -2,7 +2,7 @@
 
 DigitalInputArrayROS::DigitalInputArrayROS(rclcpp::Node* node) : node_(node)
 {
-    digital_pub_ = node_->create_publisher<robotino_msgs::msg::DigitalReadings>("digital_readings", 10);
+    digital_pub_ = node_->create_publisher<base_interfaces::msg::DigitalReadings>("digital_readings", 10);
 }
 
 DigitalInputArrayROS::~DigitalInputArrayROS()

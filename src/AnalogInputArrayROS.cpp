@@ -2,7 +2,7 @@
 
 AnalogInputArrayROS::AnalogInputArrayROS(rclcpp::Node* node) : node_(node)
 {
-    analog_pub_ = node_->create_publisher<robotino_msgs::msg::AnalogReadings>("analog_readings", 10);
+    analog_pub_ = node_->create_publisher<base_interfaces::msg::AnalogReadings>("analog_readings", 10);
 }
 
 AnalogInputArrayROS::~AnalogInputArrayROS()

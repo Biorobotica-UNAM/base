@@ -4,7 +4,7 @@
 #include "rec/robotino/api2/DigitalOutputArray.h"
 
 #include "rclcpp/rclcpp.hpp"
-#include "robotino_msgs/msg/digital_readings.hpp"
+#include "base_interfaces/msg/digital_readings.hpp"
 
 class DigitalOutputArrayROS: public rec::robotino::api2::DigitalOutputArray
 {
@@ -14,9 +14,9 @@ public:
 
 private:
 	rclcpp::Node* node_;
-	rclcpp::Subscription<robotino_msgs::msg::DigitalReadings>::SharedPtr digital_sub_;
+	rclcpp::Subscription<base_interfaces::msg::DigitalReadings>::SharedPtr digital_sub_;
 
-	void setDigitalValuesCallback(const robotino_msgs::msg::DigitalReadings::ConstSharedPtr& msg);
+	void setDigitalValuesCallback(const base_interfaces::msg::DigitalReadings::ConstSharedPtr& msg);
 };
 
 #endif /* DIGITALOUTPUTARRAYROS_HPP_ */
