@@ -2,7 +2,7 @@
 
 PowerManagementROS::PowerManagementROS(rclcpp::Node* node) : node_(node)
 {
-    publisher_ = node_->create_publisher<robotino_msgs::msg::PowerReadings>("battery_status", 10);
+    publisher_ = node_->create_publisher<base_interfaces::msg::PowerReadings>("battery_status", 10);
     timer_ = node_->create_wall_timer(std::chrono::milliseconds(500), std::bind(&PowerManagementROS::powerTimerCb, this));
 }
 
@@ -18,7 +18,7 @@ void PowerManagementROS::readingsEvent([[maybe_unused]] float battery_voltage, [
 // Workaround for broken readingsEvent
 void PowerManagementROS::powerTimerCb()
 {
-    auto msg = robotino_msgs::msg::PowerReadings();
+    auto msg = base_interfaces::msg::PowerReadings();
     msg.header.stamp = node_->now();
     msg.voltage = this->voltage();
     msg.current = this->current();

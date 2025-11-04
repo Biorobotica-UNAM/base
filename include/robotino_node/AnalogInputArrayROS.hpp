@@ -4,7 +4,7 @@
 #include "rec/robotino/api2/AnalogInputArray.h"
 
 #include "rclcpp/rclcpp.hpp"
-#include "robotino_msgs/msg/analog_readings.hpp"
+#include "base_interfaces/msg/analog_readings.hpp"
 
 class AnalogInputArrayROS: public rec::robotino::api2::AnalogInputArray
 {

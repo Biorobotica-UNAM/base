@@ -9,13 +9,13 @@ OmniDriveROS::OmniDriveROS(rclcpp::Node* node) :
 {
 	cmd_vel_sub_ = node_->create_subscription<geometry_msgs::msg::Twist>(
 		"cmd_vel", 10, std::bind(&OmniDriveROS::cmdVelCallback, this, std::placeholders::_1));
-	set_enabled_srv_ = node_->create_service<robotino_msgs::srv::SetOmniDriveEnabled>(
+	set_enabled_srv_ = node_->create_service<base_interfaces::srv::SetOmniDriveEnabled>(
 		"cmd_vel_enable", std::bind(&OmniDriveROS::handleSetOmniDriveEnabled, this, std::placeholders::_1, std::placeholders::_2));
-	set_velocitylimit_srv_ = node_->create_service<robotino_msgs::srv::SetVelLimits>(
+	set_velocitylimit_srv_ = node_->create_service<base_interfaces::srv::SetVelLimits>(
 		"set_velocity_limits", std::bind(&OmniDriveROS::handleSetVelLimits, this, std::placeholders::_1, std::placeholders::_2));
 	bumper_sub_ = node_->create_subscription<std_msgs::msg::Bool>(
       "bumper", 10, std::bind(&OmniDriveROS::bumperCallback, this, std::placeholders::_1));
-	motor_error_pub_ = node_->create_publisher<robotino_msgs::msg::MotorErrorReadings>("motor_error_readings", 10);
+	motor_error_pub_ = node_->create_publisher<base_interfaces::msg::MotorErrorReadings>("motor_error_readings", 10);
 	motor_error_timestamps_.resize(3);
 	std::generate(motor_error_timestamps_.begin(), motor_error_timestamps_.end(), 
               [this]() { return node_->now(); });
@@ -189,8 +189,8 @@ void OmniDriveROS::setMaxMin(double max_linear_vel, double min_linear_vel, doubl
 	min_angular_vel_ = min_angular_vel;
 }
 
-bool OmniDriveROS::handleSetOmniDriveEnabled(const std::shared_ptr<robotino_msgs::srv::SetOmniDriveEnabled::Request> request,
-                                    std::shared_ptr<robotino_msgs::srv::SetOmniDriveEnabled::Response> response)
+bool OmniDriveROS::handleSetOmniDriveEnabled(const std::shared_ptr<base_interfaces::srv::SetOmniDriveEnabled::Request> request,
+                                    std::shared_ptr<base_interfaces::srv::SetOmniDriveEnabled::Response> response)
 {
     enabled_ = request->enable;
 	
@@ -206,8 +206,8 @@ bool OmniDriveROS::handleSetOmniDriveEnabled(const std::shared_ptr<robotino_msgs
     return true;
 }
 
-bool OmniDriveROS::handleSetVelLimits(const std::shared_ptr<robotino_msgs::srv::SetVelLimits::Request> request,
-                                    std::shared_ptr<robotino_msgs::srv::SetVelLimits::Response> response)
+bool OmniDriveROS::handleSetVelLimits(const std::shared_ptr<base_interfaces::srv::SetVelLimits::Request> request,
+                                    std::shared_ptr<base_interfaces::srv::SetVelLimits::Response> response)
 {	
 	max_linear_vel_ = request->max_linear_vel;
 	min_linear_vel_ = request->min_linear_vel;

@@ -2,7 +2,7 @@
 
 MotorArrayROS::MotorArrayROS(rclcpp::Node* node) : node_(node)
 {
-	motor_pub_ = node_->create_publisher<robotino_msgs::msg::MotorReadings>("motor_readings", 10);
+	motor_pub_ = node_->create_publisher<base_interfaces::msg::MotorReadings>("motor_readings", 10);
 	joint_states_pub_ = node->create_publisher<sensor_msgs::msg::JointState>("joint_states", 10);
 
 	initMsgs();
