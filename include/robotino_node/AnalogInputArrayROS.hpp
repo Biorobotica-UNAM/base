@@ -14,8 +14,8 @@ public:
 
 private:
     rclcpp::Node* node_;
-    rclcpp::Publisher<robotino_msgs::msg::AnalogReadings>::SharedPtr analog_pub_;
-	robotino_msgs::msg::AnalogReadings analog_msg_;
+    rclcpp::Publisher<base_interfaces::msg::AnalogReadings>::SharedPtr analog_pub_;
+	base_interfaces::msg::AnalogReadings analog_msg_;
 
 	void valuesChangedEvent(const float* values, unsigned int size);
 
