@@ -61,7 +61,7 @@ add_executable(${PROJECT_NAME}
 )
 
 target_link_libraries(${PROJECT_NAME} ${REC_ROBOTINO_API2_LIBRARY})
-ament_target_dependencies(${PROJECT_NAME} rclcpp sensor_msgs geometry_msgs std_msgs robotino_msgs)
+ament_target_dependencies(${PROJECT_NAME} rclcpp sensor_msgs geometry_msgs std_msgs base_interfaces)
 
 add_executable(robotino_odometry_node
   src/rto_odometry_node.cpp
