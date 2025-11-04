@@ -70,7 +70,7 @@ add_executable(robotino_odometry_node
   src/OdometryROS.cpp
 )
 target_link_libraries(robotino_odometry_node ${REC_ROBOTINO_API2_LIBRARY})
-ament_target_dependencies(robotino_odometry_node rclcpp geometry_msgs nav_msgs tf2 tf2_ros robotino_msgs)
+ament_target_dependencies(robotino_odometry_node rclcpp geometry_msgs nav_msgs tf2 tf2_ros base_interfaces)
 
 add_executable(robotino_laserrangefinder_node
   src/rto_laserrangefinder_node.cpp
