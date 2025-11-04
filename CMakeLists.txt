@@ -44,7 +44,7 @@ include_directories(
 )
 
 add_executable(${PROJECT_NAME}
-  src/${PROJECT_NAME}.cpp
+  src/robotino_node.cpp
   src/RTONode.cpp
   src/ComROS.cpp
   src/PowerManagementROS.cpp
