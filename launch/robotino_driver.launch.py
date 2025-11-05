@@ -45,8 +45,8 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         # Launch robotino driver node
         Node(
             package='base',
-            executable='robotino_node',
-            name='robotino_node',
+            executable='base',
+            name='base',
             namespace=namespace,
             parameters=[{
                 'hostname' : hostname,
