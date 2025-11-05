@@ -128,7 +128,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     return[launch_nodes]
 
 def generate_launch_description():
-    pkg_share_description = get_package_share_directory('robotino_description')
+    pkg_share_description = get_package_share_directory('justina_description')
 
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
@@ -149,7 +149,7 @@ def generate_launch_description():
         description= 'Whether to start the joint state broadcaster or not')
 
     declare_robot_description_config_argument = DeclareLaunchArgument(
-        'robot_description',default_value=os.path.join(pkg_share_description, "urdf/robotino.urdf.xacro"),
+        'robot_description',default_value=os.path.join(pkg_share_description, "urdf/robotino/robotino.urdf.xacro"),
         description='Full path to robot description')
 
     declare_hostname_argument = DeclareLaunchArgument(
