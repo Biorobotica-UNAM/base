@@ -44,7 +44,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
 
         # Launch robotino driver node
         Node(
-            package='robotino_node',
+            package='base',
             executable='robotino_node',
             name='robotino_node',
             namespace=namespace,
@@ -57,7 +57,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         ),
 
         Node(
-            package='robotino_node',
+            package='base',
             executable='robotino_odometry_node',
             name='robotino_odometry_node',
             namespace=namespace,
