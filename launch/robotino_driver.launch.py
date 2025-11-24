@@ -42,7 +42,7 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_nodes = GroupAction(
         actions=[
 
-        PushRosNamespace(namespace);
+        PushRosNamespace('base'),
 
         # Launch robotino driver node
         Node(
