@@ -5,7 +5,7 @@ from ament_index_python.packages import get_package_share_directory
 from launch.actions import DeclareLaunchArgument, OpaqueFunction, GroupAction
 from launch.substitutions import LaunchConfiguration
 from launch import LaunchDescription
-from launch_ros.actions import Node
+from launch_ros.actions import Node, PushRosNamespace
 from launch.conditions import IfCondition
 import launch
 import xacro # type: ignore
@@ -42,12 +42,13 @@ def launch_nodes_withconfig(context, *args, **kwargs):
     launch_nodes = GroupAction(
         actions=[
 
+        PushRosNamespace('base'),
+
         # Launch robotino driver node
         Node(
             package='base',
             executable='base',
             name='base',
-            namespace=namespace,
             parameters=[{
                 'hostname' : hostname,
                 'tf_prefix' : tf_prefix,
@@ -60,7 +61,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package='base',
             executable='robotino_odometry_node',
             name='robotino_odometry_node',
-            namespace=namespace,
             parameters=[{
                 'hostname' : hostname,
                 #'tf_prefix' : launch_configuration['namespace']+'/', 
@@ -73,7 +73,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
         Node(
             package="robot_state_publisher",
             executable="robot_state_publisher",
-            namespace=namespace,
             parameters=[{'robot_description': xacro_description,
                         'use_sim_time': use_sim_time,
                         'publish_frequency': launch_rsp_freq,
@@ -85,7 +84,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             package="joint_state_publisher",
             executable="joint_state_publisher",
             name="joint_state_publisher",
-            namespace=namespace,
             condition = IfCondition(launch_jsb),
         ),
 
@@ -114,7 +112,6 @@ def launch_nodes_withconfig(context, *args, **kwargs):
             executable="urg_node_driver",
             name= "urg_node",
             output="log",
-            namespace=namespace,
             parameters=[{'serial_port': '/dev/lidar', 
                         'serial_baud': 115200,  
                         #'frame_id': launch_configuration['namespace']+'/laser_link',
@@ -132,7 +129,7 @@ def generate_launch_description():
 
     # Declare launch configuration variables
     declare_namespace_argument = DeclareLaunchArgument(
-        'namespace', default_value='',
+        'namespace', default_value='base',
         description='Top-level namespace')
     
     declare_tf_prefix_argument = DeclareLaunchArgument(
