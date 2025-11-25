@@ -1,6 +1,0 @@
-{
-    "files.associations": {
-        "*.vhd": "bibtex",
-        "functional": "cpp"
-    }
-}
