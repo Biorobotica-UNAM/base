@@ -1,0 +1,87 @@
+<?xml version="1.0"?>
+<launch>
+
+  <!-- ===== Launch arguments ===== -->
+  <arg name="namespace" default="base" description="Top-level namespace" />
+  <arg name="tf_prefix" default="" description="TF_Prefix" />
+
+  <arg name="use_sim_time" default="false" description="Use simulation clock if true" />
+
+  <arg name="launch_jsb"
+       default="false"
+       description="Whether to start the joint state broadcaster or not" />
+
+  <!-- Ruta al archivo XACRO -->
+  <arg name="robot_description"
+       default="$(find-pkg-share justina_description)/urdf/robotino/robotino.urdf.xacro"
+       description="Full path to robot description" />
+
+  <arg name="hostname"
+       default="172.27.1.1"
+       description="ip address of robotino" />
+
+  <arg name="rsp_freq"
+       default="20.0"
+       description="publish frequency for robot state publisher node" />
+
+  <arg name="bumper_timeout"
+       default="2.0"
+       description="Time to stop robot when bumper is hit" />
+
+  <arg name="motor_timeout"
+       default="0.0"
+       description="Time to stop robot when motor is not responding" />
+
+  <arg name="launch_odom_tf"
+       default="true"
+       description="Whether to broadcast the tf for odom frame" />
+
+  <!-- ===== Group with namespace 'base' (equivalente a PushRosNamespace('base')) ===== -->
+  <group>
+    <push-ros-namespace namespace="base"/>
+    <!-- Robotino base driver -->
+    <node pkg="base" exec="base" name="base">
+      <param name="hostname" value="$(var hostname)" />
+      <param name="tf_prefix" value="$(var tf_prefix)" />
+      <param name="bumper_timeout" value="$(var bumper_timeout)" />
+      <param name="motor_timeout" value="$(var motor_timeout)" />
+    </node>
+
+    <!-- Odometry node -->
+    <node pkg="base" exec="robotino_odometry_node" name="robotino_odometry_node">
+      <param name="hostname" value="$(var hostname)" />
+      <param name="tf_prefix" value="$(var tf_prefix)" />
+      <param name="publish_odom_tf" value="$(var launch_odom_tf)" />
+    </node>
+
+    <!-- Robot State Publisher (procesa el XACRO en tiempo de lanzamiento) -->
+    <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher">
+      <param name="robot_description"
+             value="$(command 'xacro $(var robot_description)')" />
+      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <param name="publish_frequency" value="$(var rsp_freq)" />
+      <param name="frame_prefix" value="$(var tf_prefix)" />
+    </node>
+
+    <!-- Joint State Publisher (condicional) -->
+    <node pkg="joint_state_publisher"
+          exec="joint_state_publisher"
+          name="joint_state_publisher"
+          if="$(var launch_jsb)">
+    </node>
+
+    <!-- URG LIDAR node -->
+    <node pkg="urg_node"
+          exec="urg_node_driver"
+          name="urg_node"
+          output="log">
+      <param name="serial_port" value="/dev/lidar" />
+      <param name="serial_baud" value="115200" />
+      <param name="frame_id" value="laser_link" />
+      <param name="calibrate_time" value="false" />
+      <param name="laser_frame_id" value="laser_link" />
+    </node>
+
+  </group>
+
+</launch>
