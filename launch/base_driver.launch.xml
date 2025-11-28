@@ -80,6 +80,8 @@
       <param name="frame_id" value="laser_link" />
       <param name="calibrate_time" value="false" />
       <param name="laser_frame_id" value="laser_link" />
+      <param name="angle_min" value="-1.5708" />
+      <param name="angle_max" value="1.5708" />
     </node>
 
   </group>
