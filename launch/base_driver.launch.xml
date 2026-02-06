@@ -40,7 +40,7 @@
   <group>
     <push-ros-namespace namespace="base"/>
     <!-- Robotino base driver -->
-    <node pkg="base" exec="base" name="base">
+    <node pkg="base" exec="base" name="base_node">
       <param name="hostname" value="$(var hostname)" />
       <param name="tf_prefix" value="$(var tf_prefix)" />
       <param name="bumper_timeout" value="$(var bumper_timeout)" />
