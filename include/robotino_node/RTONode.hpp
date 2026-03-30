@@ -9,7 +9,7 @@
 #include "robotino_node/OmniDriveROS.hpp"
 #include "robotino_node/GyroscopeROS.hpp"
 //#include "robotino_node/AnalogInputArrayROS.hpp"
-//#include "robotino_node/DigitalInputArrayROS.hpp"
+#include "robotino_node/DigitalInputArrayROS.hpp"
 #include "robotino_node/DigitalOutputArrayROS.hpp"
 //#include "robotino_node/DistanceSensorArrayROS.hpp"
 //#include "robotino_node/ElectricalGripperROS.hpp"
@@ -33,7 +33,7 @@ private:
 	std::shared_ptr<OmniDriveROS> omni_drive_;
 	std::shared_ptr<GyroscopeROS> imu_;
 	//std::shared_ptr<AnalogInputArrayROS> analog_input_array_;
-	//std::shared_ptr<DigitalInputArrayROS> digital_input_array_;
+	std::shared_ptr<DigitalInputArrayROS> digital_input_array_;
 	std::shared_ptr<DigitalOutputArrayROS> digital_output_array_;
 	//std::shared_ptr<DistanceSensorArrayROS> distance_sensor_array_;
 	//std::shared_ptr<ElectricalGripperROS> electrical_gripper_;

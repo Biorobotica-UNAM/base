@@ -17,7 +17,7 @@
        description="Full path to robot description" />
 
   <arg name="hostname"
-       default="172.27.1.1"
+       default="127.0.1.1"
        description="ip address of robotino" />
 
   <arg name="rsp_freq"

@@ -53,7 +53,7 @@ add_executable(${PROJECT_NAME}
   src/MotorArrayROS.cpp
   src/BumperROS.cpp
   #src/AnalogInputArrayROS.cpp
-  #src/DigitalInputArrayROS.cpp
+  src/DigitalInputArrayROS.cpp
   src/DigitalOutputArrayROS.cpp
   #src/DistanceSensorArrayROS.cpp
   #src/ElectricalGripperROS.cpp

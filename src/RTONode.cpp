@@ -58,8 +58,8 @@ void RTONode::initModules()
     //analog_input_array_ = std::make_shared<AnalogInputArrayROS>(this);
     //analog_input_array_->setComId(com_->id());
 
-    //digital_input_array_ = std::make_shared<DigitalInputArrayROS>(this);
-    //digital_input_array_->setComId(com_->id());
+    digital_input_array_ = std::make_shared<DigitalInputArrayROS>(this);
+    digital_input_array_->setComId(com_->id());
 
     digital_output_array_ = std::make_shared<DigitalOutputArrayROS>(this);
     digital_output_array_->setComId(com_->id());
