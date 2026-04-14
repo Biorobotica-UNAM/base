@@ -77,14 +77,6 @@
           if="$(var launch_jsb)">
     </node>
 
-    <!-- Static TF: base_footprint → base_link
-         Robotino only publishes joint_states for active (motor) joints.
-         The base_footprint_joint is fixed in the URDF and must be broadcast statically. -->
-    <node pkg="tf2_ros"
-          exec="static_transform_publisher"
-          name="base_footprint_broadcaster"
-          args="0 0 0 0 0 0 base_footprint base_link" />
-
     <!-- URG LIDAR -->
     <node pkg="urg_node"
           exec="urg_node_driver"
