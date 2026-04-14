@@ -2,8 +2,8 @@
 <launch>
 
   <!-- ===== Launch arguments ===== -->
-  <arg name="namespace" default="base" description="Top-level namespace" />
-  <arg name="tf_prefix" default="" description="TF_Prefix" />
+  <arg name="namespace"    default="base"  description="Top-level namespace" />
+  <arg name="tf_prefix"    default=""      description="TF prefix (include trailing slash if non-empty, e.g. 'hardware/')" />
 
   <arg name="use_sim_time" default="false" description="Use simulation clock if true" />
 
@@ -11,18 +11,18 @@
        default="false"
        description="Whether to start the joint state broadcaster or not" />
 
-  <!-- Ruta al archivo XACRO -->
+  <!-- Path to robot URDF or XACRO file -->
   <arg name="robot_description"
-       default="$(find-pkg-share justina_description)/urdf/robotino/robotino.urdf.xacro"
-       description="Full path to robot description" />
+       default="$(find-pkg-share justina_description)/urdf/justina.urdf"
+       description="Full path to robot description (.urdf or .urdf.xacro)" />
 
   <arg name="hostname"
        default="127.0.1.1"
-       description="ip address of robotino" />
+       description="IP address of robotino" />
 
   <arg name="rsp_freq"
        default="20.0"
-       description="publish frequency for robot state publisher node" />
+       description="Publish frequency for robot_state_publisher" />
 
   <arg name="bumper_timeout"
        default="2.0"
@@ -34,54 +34,69 @@
 
   <arg name="launch_odom_tf"
        default="true"
-       description="Whether to broadcast the tf for odom frame" />
+       description="Whether to broadcast the odom TF" />
 
-  <!-- ===== Group with namespace 'base' (equivalente a PushRosNamespace('base')) ===== -->
+  <!-- ===== Group with namespace 'base' ===== -->
   <group>
     <push-ros-namespace namespace="base"/>
+
     <!-- Robotino base driver -->
     <node pkg="base" exec="base" name="base_node">
-      <param name="hostname" value="$(var hostname)" />
-      <param name="tf_prefix" value="$(var tf_prefix)" />
-      <param name="bumper_timeout" value="$(var bumper_timeout)" />
-      <param name="motor_timeout" value="$(var motor_timeout)" />
+      <param name="hostname"        value="$(var hostname)" />
+      <param name="tf_prefix"       value="$(var tf_prefix)" />
+      <param name="bumper_timeout"  value="$(var bumper_timeout)" />
+      <param name="motor_timeout"   value="$(var motor_timeout)" />
     </node>
 
     <!-- Odometry node -->
     <node pkg="base" exec="robotino_odometry_node" name="robotino_odometry_node">
-      <param name="hostname" value="$(var hostname)" />
-      <param name="tf_prefix" value="$(var tf_prefix)" />
-      <param name="publish_odom_tf" value="$(var launch_odom_tf)" />
+      <param name="hostname"         value="$(var hostname)" />
+      <param name="tf_prefix"        value="$(var tf_prefix)" />
+      <param name="publish_odom_tf"  value="$(var launch_odom_tf)" />
     </node>
 
-    <!-- Robot State Publisher (procesa el XACRO en tiempo de lanzamiento) -->
-    <node pkg="robot_state_publisher" exec="robot_state_publisher" name="robot_state_publisher">
+    <!-- Robot State Publisher
+         $(command 'cat FILE') is used instead of xacro for plain .urdf files.
+         xacro transparently handles both .urdf and .urdf.xacro, so we keep it. -->
+    <node pkg="robot_state_publisher"
+          exec="robot_state_publisher"
+          name="robot_state_publisher">
       <param name="robot_description"
              value="$(command 'xacro $(var robot_description)')" />
-      <param name="use_sim_time" value="$(var use_sim_time)" />
+      <param name="use_sim_time"      value="$(var use_sim_time)" />
       <param name="publish_frequency" value="$(var rsp_freq)" />
-      <param name="frame_prefix" value="$(var tf_prefix)" />
+      <!-- frame_prefix left empty: Justina's URDF uses global frame names (base_link, etc.)
+           If you need namespaced frames, pass tf_prefix with a trailing slash, e.g. "hardware/" -->
+      <param name="frame_prefix"      value="$(var tf_prefix)" />
     </node>
 
-    <!-- Joint State Publisher (condicional) -->
+    <!-- Joint State Publisher (optional) -->
     <node pkg="joint_state_publisher"
           exec="joint_state_publisher"
           name="joint_state_publisher"
           if="$(var launch_jsb)">
     </node>
 
-    <!-- URG LIDAR node -->
+    <!-- Static TF: base_footprint → base_link
+         Robotino only publishes joint_states for active (motor) joints.
+         The base_footprint_joint is fixed in the URDF and must be broadcast statically. -->
+    <node pkg="tf2_ros"
+          exec="static_transform_publisher"
+          name="base_footprint_broadcaster"
+          args="0 0 0 0 0 0 base_footprint base_link" />
+
+    <!-- URG LIDAR -->
     <node pkg="urg_node"
           exec="urg_node_driver"
           name="urg_node"
           output="log">
-      <param name="serial_port" value="/dev/lidar" />
-      <param name="serial_baud" value="115200" />
-      <param name="frame_id" value="laser_link" />
+      <param name="serial_port"    value="/dev/lidar" />
+      <param name="serial_baud"    value="115200" />
+      <param name="frame_id"       value="laser_link" />
       <param name="calibrate_time" value="false" />
       <param name="laser_frame_id" value="laser_link" />
-      <param name="angle_min" value="-1.5708" />
-      <param name="angle_max" value="1.5708" />
+      <param name="angle_min"      value="-1.5708" />
+      <param name="angle_max"      value="1.5708" />
     </node>
 
   </group>
