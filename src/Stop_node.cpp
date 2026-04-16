@@ -13,30 +13,38 @@ public:
             std::bind(&DigitalStopNode::callback, this, std::placeholders::_1)
         );
 
-        publisher_ = this->create_publisher<std_msgs::msg::Bool>("/navigate/stop", 10);
+        publisher_ = this->create_publisher<std_msgs::msg::Bool>("/navigation/stop", 10);
     }
 
 private:
     void callback(const base_interfaces::msg::DigitalReadings::SharedPtr msg)
     {
-        if (msg->values.size() <= 7)
+        // 👇 Indica que están llegando mensajes (cada 2 segundos máximo)
+        bool first_msg_ = true;
+
+        if (first_msg_)
         {
-            RCLCPP_WARN(this->get_logger(), "No existe índice 7");
-            return;
+            RCLCPP_INFO(this->get_logger(), "Recibiendo /hardware/base/digital_readings (%ld valores)",
+            msg->values.size());
+            first_msg_ = false;
         }
 
-        bool current_value = msg->values[7];
+        bool current_value = msg->values[6];
 
-        if (!prev_value_ && current_value)
+        std_msgs::msg::Bool stop_msg;
+        stop_msg.data = current_value;
+
+        publisher_->publish(stop_msg);
+
+        if (current_value)
         {
-            RCLCPP_INFO(this->get_logger(), "STOP activado");
-
-            std_msgs::msg::Bool stop_msg;
-            stop_msg.data = true;
-            publisher_->publish(stop_msg);
+            RCLCPP_INFO_THROTTLE(
+                this->get_logger(),
+                *this->get_clock(),
+                2000,
+                "STOP activo"
+            );
         }
-
-        prev_value_ = current_value;
     }
 
     rclcpp::Subscription<base_interfaces::msg::DigitalReadings>::SharedPtr subscription_;

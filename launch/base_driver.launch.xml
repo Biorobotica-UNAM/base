@@ -84,6 +84,13 @@
       <param name="angle_max" value="1.5708" />
     </node>
 
+    <node 
+        pkg="base" 
+        exec="Stop_node" 
+        name="Stop_node"
+        output="screen">
+    </node>
+
   </group>
 
 </launch>
