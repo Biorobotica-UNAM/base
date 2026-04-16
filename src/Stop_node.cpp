@@ -19,16 +19,6 @@ public:
 private:
     void callback(const base_interfaces::msg::DigitalReadings::SharedPtr msg)
     {
-        // 👇 Indica que están llegando mensajes (cada 2 segundos máximo)
-        bool first_msg_ = true;
-
-        if (first_msg_)
-        {
-            RCLCPP_INFO(this->get_logger(), "Recibiendo /hardware/base/digital_readings (%ld valores)",
-            msg->values.size());
-            first_msg_ = false;
-        }
-
         bool current_value = msg->values[6];
 
         std_msgs::msg::Bool stop_msg;
