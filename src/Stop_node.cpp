@@ -13,7 +13,7 @@ public:
             std::bind(&DigitalStopNode::callback, this, std::placeholders::_1)
         );
 
-        publisher_ = this->create_publisher<std_msgs::msg::Bool>("/navigation/stop", 10);
+        publisher_ = this->create_publisher<std_msgs::msg::Bool>("/navigation/navigation_ctrl/stop", 10);
     }
 
 private:
