@@ -55,22 +55,7 @@
       <param name="publish_odom_tf"  value="$(var launch_odom_tf)" />
     </node>
 
-    <!-- Robot State Publisher
-         $(command 'cat FILE') is used instead of xacro for plain .urdf files.
-         xacro transparently handles both .urdf and .urdf.xacro, so we keep it. -->
-    <node pkg="robot_state_publisher"
-          exec="robot_state_publisher"
-          name="robot_state_publisher">
-      <param name="robot_description"
-             value="$(command 'xacro $(var robot_description)')" />
-      <param name="use_sim_time"      value="$(var use_sim_time)" />
-      <param name="publish_frequency" value="$(var rsp_freq)" />
-      <!-- frame_prefix left empty: Justina's URDF uses global frame names (base_link, etc.)
-           If you need namespaced frames, pass tf_prefix with a trailing slash, e.g. "hardware/" -->
-      <param name="frame_prefix"      value="$(var tf_prefix)" />
-    </node>
-
-    <!-- Joint State Publisher (optional) -->
+    <!-- Joint State Publisher (condicional) -->
     <node pkg="joint_state_publisher"
           exec="joint_state_publisher"
           name="joint_state_publisher"
@@ -89,6 +74,13 @@
       <param name="laser_frame_id" value="laser_link" />
       <param name="angle_min"      value="-1.5708" />
       <param name="angle_max"      value="1.5708" />
+    </node>
+
+    <node 
+        pkg="base" 
+        exec="Stop_node" 
+        name="Stop_node"
+        output="screen">
     </node>
 
   </group>

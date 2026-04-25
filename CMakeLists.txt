@@ -90,6 +90,21 @@ add_executable(robotino_camera_node
 target_link_libraries(robotino_camera_node ${REC_ROBOTINO_API2_LIBRARY})
 ament_target_dependencies(robotino_camera_node rclcpp std_msgs sensor_msgs)
 
+add_executable(Stop_node
+  src/Stop_node.cpp
+)
+
+ament_target_dependencies(Stop_node
+  rclcpp
+  std_msgs
+  base_interfaces
+)
+
+install(
+  TARGETS Stop_node
+  DESTINATION lib/${PROJECT_NAME}
+)
+
 install(
   TARGETS ${PROJECT_NAME} robotino_odometry_node robotino_camera_node robotino_laserrangefinder_node
   DESTINATION lib/${PROJECT_NAME}
