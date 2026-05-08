@@ -21,20 +21,26 @@ private:
     {
         bool current_value = msg->values[6];
 
+        // Publicar siempre (esto está bien)
         std_msgs::msg::Bool stop_msg;
         stop_msg.data = current_value;
-
         publisher_->publish(stop_msg);
 
-        if (current_value)
+        // Detectar cambio
+        if (current_value != prev_value_)
         {
-            RCLCPP_INFO_THROTTLE(
-                this->get_logger(),
-                *this->get_clock(),
-                2000,
-                "STOP activo"
-            );
+            if (current_value)
+            {
+                RCLCPP_INFO(this->get_logger(), "STOP activo");
+            }
+            else
+            {
+                RCLCPP_INFO(this->get_logger(), "STOP desactivado");
+            }
         }
+
+        // Actualizar estado
+        prev_value_ = current_value;
     }
 
     rclcpp::Subscription<base_interfaces::msg::DigitalReadings>::SharedPtr subscription_;
