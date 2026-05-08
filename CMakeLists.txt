@@ -105,18 +105,6 @@ install(
   DESTINATION lib/${PROJECT_NAME}
 )
 
-add_executable(virtual_joint_publisher_node
-  src/virtual_joint_publisher_node.cpp
-)
-
-ament_target_dependencies(virtual_joint_publisher_node
-  rclcpp nav_msgs sensor_msgs tf2
-)
-
-install(TARGETS virtual_joint_publisher_node
-  DESTINATION lib/${PROJECT_NAME}
-)
-
 install(
   TARGETS ${PROJECT_NAME} robotino_odometry_node robotino_camera_node robotino_laserrangefinder_node
   DESTINATION lib/${PROJECT_NAME}
