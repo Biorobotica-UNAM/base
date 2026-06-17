@@ -23,7 +23,7 @@ private:
 
         // Publicar siempre (esto está bien)
         std_msgs::msg::Bool stop_msg;
-        stop_msg.data = current_value;
+        stop_msg.data = !current_value;
         publisher_->publish(stop_msg);
 
         // Detectar cambio
